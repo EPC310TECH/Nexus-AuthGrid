@@ -1,0 +1,37 @@
+{
+  "/zoom_alert": [
+    "Zoom meeting started",
+    "Zoom webinar scheduled for today",
+    "Zoom recording available",
+    "Zoom meeting cancelled",
+    "Zoom meeting rescheduled",
+    "Zoom meeting invite sent",
+    "Zoom meeting reminder"
+  ],
+  "/auth_issue": [
+    "Authentication failed for user XYZ",
+    "Password reset required for user ABC",
+    "Account locked due to suspicious activity",
+    "Authentication server down",
+    "Two-factor authentication required",
+    "Account verification required",
+    "Password expired"
+  ],
+  "/rate_limit_exceeded": [
+    "Rate limit exceeded for API endpoint XYZ",
+    "Too many requests from IP address ABC",
+    "Rate limit exceeded for user XYZ",
+    "API endpoint XYZ temporarily unavailable",
+    "Rate limit exceeded for organization ABC",
+    "API endpoint XYZ rate limit reset"
+  ],
+  "/general_notification": [
+    "System maintenance scheduled for tonight",
+    "New feature released: XYZ",
+    "Urgent security update required",
+    "Server downtime scheduled for tomorrow",
+    "System update complete",
+    "New user onboarding process",
+    "Company announcement"
+  ]
+}
