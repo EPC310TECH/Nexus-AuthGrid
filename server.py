@@ -2,7 +2,7 @@ import os
 import logging
 from dotenv import load_dotenv
 from flask import Flask, jsonify
-
+from flask_cors import CORS
 from src.auth.oauth import auth_blueprint
 from src.ratelimit.limiter import rate_limiter_blueprint
 from src.recordings.manager import recording_blueprint
@@ -14,12 +14,15 @@ from src.webhooks.zoom_webhook_handler import zoom_webhook as zoom_webhook_bluep
 load_dotenv()
 
 class Config:
-    DEBUG = True
-    # Add other configuration variables here
+    DEBUG = os.getenv("DEBUG", "True") == "True"
+    LOG_FILE = os.getenv("LOG_FILE", "app.log")
+    PORT = int(os.getenv("PORT", 5000))
+    CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    CORS(app, resources={r"/*": {"origins": Config.CORS_ORIGINS}})  # Allow cross-origin requests
 
     # Register blueprints (API modules)
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
@@ -42,8 +45,12 @@ app = create_app()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
+file_handler = logging.FileHandler(Config.LOG_FILE)
+file_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+app.logger.addHandler(file_handler)
 
 # Run the server
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))  # Default port: 5000
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=Config.PORT)
