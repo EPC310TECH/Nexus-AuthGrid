@@ -46,7 +46,7 @@ def zoom_api_request(method, endpoint, data=None, params=None):
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Zoom API request failed: {e}")
-        return None
+        return {"error": str(e)}
 
 
 @zoom_blueprint.route("/users", methods=["GET"])
