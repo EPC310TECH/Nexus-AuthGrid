@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 
 # Load encryption key from environment variable
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+if not ENCRYPTION_KEY:
+    raise ValueError("ENCRYPTION_KEY environment variable is not set")
+
 cipher_suite = Fernet(ENCRYPTION_KEY)
 
 

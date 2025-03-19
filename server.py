@@ -8,7 +8,7 @@ from src.ratelimit.limiter import rate_limiter_blueprint
 from src.recordings.manager import recording_blueprint
 from src.user_monitoring.activity import activity_blueprint
 from src.webhooks.slack_handler import slack_blueprint
-from src.webhooks.zoom_webhook_handler import zoom_webhook as zoom_webhook_blueprint
+from src.webhooks.zoom_handler import zoom_webhook as zoom_webhook_blueprint
 
 # Load environment variables
 load_dotenv()
