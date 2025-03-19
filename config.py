@@ -18,3 +18,10 @@ CONFIG = {
 for key, value in CONFIG.items():
     if "default" in value:
         log_warning(f"Environment variable for {key} is missing or using default value.")
+
+class Config:
+    DEBUG = os.getenv("DEBUG", "True") == "True"
+    PORT = int(os.getenv("PORT", 5000))
+    CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")
+
+config = Config()

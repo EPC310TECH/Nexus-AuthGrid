@@ -19,6 +19,10 @@ def verify_signature(payload, received_signature, timestamp):
             hashlib.sha256
         ).hexdigest()
 
+        # Log computed and received signatures for debugging
+        log_info(f"Computed signature: {computed_signature}")
+        log_info(f"Received signature: {received_signature}")
+
         is_valid = hmac.compare_digest(computed_signature, received_signature)
         if is_valid:
             log_info("Signature verified successfully")
