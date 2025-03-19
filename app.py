@@ -11,7 +11,7 @@ CORS(app)  # Allow cross-origin requests
 # Registering routes
 app.add_url_rule("/token/refresh", "refresh_token", refresh_token, methods=["POST"])
 app.add_url_rule("/webhooks/zoom", "zoom_webhook", zoom_webhook, methods=["POST"])
-app.add_url_rule("/webhooks/slack_handler", "slack_webhook", handle_slack_command(), methods=["POST"])
+app.add_url_rule("/webhooks/slack_handler", "slack_webhook", handle_slack_command, methods=["POST"])
 
 @app.errorhandler(500)
 def internal_error(error):
