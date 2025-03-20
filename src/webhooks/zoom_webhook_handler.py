@@ -1,49 +1,40 @@
-import os
-import json
-import requests
-from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-
-# Load secrets from .env file
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from src.webhooks.zoom_handler import zoom_webhook
+from src.webhooks.slack_handler import handle_slack_command
+from src.auth.oauth_manager import refresh_token
+from src.utils.logger import log_info, log_error
+from config import configfile
 load_dotenv()
-
-# Retrieve stored credentials
-AUTHCORE_ACCOUNT_ID = os.getenv("AuthCore_Account_ID")
-TOKENVAULT_CLIENT_ID = os.getenv("TokenVault_Client_ID")
-TOKENVAULT_SECRET = os.getenv("TokenVault_Secret_Token")
-RATESHIELD_SECRET = os.getenv("RateShield_Client_Secret")
-RATESHIELD_VERIFICATION_TOKEN = os.getenv("RateShield_Verification_Token")
-AUTHRELAY_CLIENT_ID = os.getenv("AuthRelay_Client_ID")
-
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": config.CORS_ORIGINS}})  # Allow cross-origin requests
+AUTHCORE_ACCOUNT_ID = os.getenv("AuthCore_Account_ID")
+@app.before_requestD = os.getenv("TokenVault_Client_ID")
+def log_request_info():getenv("TokenVault_Secret_Token")
+    log_info(f"Incoming request: {request.method} {request.url}")
+ION_TOKEN = os.getenv("RateShield_Verification_Token")
+# Registering routes
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
-# Temporary storage for OAuth tokens
-access_tokens = {}
-
-
+app.add_url_rule("/token/refresh", "refresh_token", refresh_token, methods=["POST"])
+app.add_url_rule("/webhooks/zoom", "zoom_webhook", zoom_webhook, methods=["POST"])
+app.add_url_rule("/webhooks/slack", "slack_webhook", handle_slack_command, methods=["POST"])
 # Function to get Zoom OAuth token from TokenVault
-def get_zoom_access_token():
-    global access_tokens
-    token_url = "https://zoom.us/oauth/token"
-    headers = {
-        "Authorization": f"Basic {TOKENVAULT_CLIENT_ID}:{TOKENVAULT_SECRET}",
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
-    data = {"grant_type": "client_credentials"}
-
+@app.errorhandler(500)
+def internal_error(error):
+    log_error(f"Internal Server Error: {error}")
+    return jsonify({"error": "Internal Server Error"}), 500
+": f"Basic {TOKENVAULT_CLIENT_ID}:{TOKENVAULT_SECRET}",
+@app.errorhandler(404)        "Content-Type": "application/x-www-form-urlencoded",
+def not_found(error):    }
+    log_error(f"Route not found: {error}")    data = {"grant_type": "client_credentials"}
+    return jsonify({"error": "Not Found"}), 404
     response = requests.post(token_url, headers=headers, data=data)
-    if response.status_code == 200:
-        token_info = response.json()
-        access_tokens["zoom"] = token_info["access_token"]
-        return token_info["access_token"]
-    else:
-        print("❌ Failed to obtain OAuth token:", response.text)
-        return None
-
-
-# Verify webhook request authenticity
-def verify_webhook_request(headers):
-    received_token = headers.get("Authorization")
+if __name__ == "__main__":    if response.status_code == 200:
+    log_info("Starting Nexus AuthGrid API server...")        token_info = response.json()
+    app.run(port=config.PORT, debug=config.DEBUG)        access_tokens["zoom"] = token_info["access_token"]
     return received_token == RATESHIELD_VERIFICATION_TOKEN
 
 
