@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "Nexus-AuthGrid API",
+    "description": "Collection of API requests for Nexus-AuthGrid",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Refresh Token",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/token/refresh",
+          "host": ["{{base_url}}"],
+          "path": ["token", "refresh"]
+        }
+      }
+    },
+    {
+      "name": "Zoom Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"meeting.started\", \"payload\": {\"object\": {\"id\": \"12345\", \"host_email\": \"host@example.com\"}}}"
+        },
+        "url": {
+          "raw": "{{base_url}}/webhooks/zoom",
+          "host": ["{{base_url}}"],
+          "path": ["webhooks", "zoom"]
+        }
+      }
+    },
+    {
+      "name": "Slack Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"command\": \"/zoom_alert\", \"text\": \"Zoom meeting started\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/webhooks/slack",
+          "host": ["{{base_url}}"],
+          "path": ["webhooks", "slack"]
+        }
+      }
+    },
+    {
+      "name": "Rate Limiter",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/ratelimit",
+          "host": ["{{base_url}}"],
+          "path": ["ratelimit"]
+        }
+      }
+    },
+    {
+      "name": "User Activity",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/user",
+          "host": ["{{base_url}}"],
+          "path": ["user"]
+        }
+      }
+    },
+    {
+      "name": "Recording",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/recording",
+          "host": ["{{base_url}}"],
+          "path": ["recording"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    }
+  ]
+}
