@@ -2,10 +2,10 @@ import os
 import logging
 from dotenv import load_dotenv
 from flask import Flask, jsonify
-from flask_cors import CORS
+from flask_cors import CORS  # Ensure flask_cors is installed
 from src.auth.oauth import auth_blueprint
 from src.ratelimit.limiter import rate_limiter_blueprint
-from src.recordings.manager import recording_blueprint
+from src.recordings.manager import recording_blueprint  # Verify this path is correct
 from src.user_monitoring.activity import activity_blueprint
 from src.webhooks.slack_handler import slack_blueprint
 from src.webhooks.zoom_handler import zoom_webhook as zoom_webhook_blueprint
@@ -13,11 +13,13 @@ from src.webhooks.zoom_handler import zoom_webhook as zoom_webhook_blueprint
 # Load environment variables
 load_dotenv()
 
+
 class Config:
     DEBUG = os.getenv("DEBUG", "True") == "True"
     LOG_FILE = os.getenv("LOG_FILE", "app.log")
     PORT = int(os.getenv("PORT", 5000))
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")
+
 
 def create_app():
     app = Flask(__name__)
@@ -39,6 +41,7 @@ def create_app():
         return jsonify({"message": "Nexus AuthGrid is running!"}), 200
 
     return app
+
 
 # Initialize Flask app
 app = create_app()
