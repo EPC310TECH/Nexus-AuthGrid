@@ -1,1 +1,6 @@
 .env
+oceans
+oceans.pub
+src/api/oceansngrok
+src/api/oceansngrok.pub
+src/api/response_from_digital_Ocean_Create_Droplet.txt
